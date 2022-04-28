@@ -11,7 +11,6 @@ public class RabbitUtils {
         connectionFactory.setUsername("admin");
         connectionFactory.setPassword("123");
         Connection connection = connectionFactory.newConnection();
-        Channel channel = connection.createChannel();
-        return channel;
+        return connection.createChannel();
     }
 }
