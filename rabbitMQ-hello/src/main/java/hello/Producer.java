@@ -4,6 +4,7 @@ package hello;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -45,10 +46,10 @@ public class Producer {
          *  消息内容
          *  1. 交换机
          *  2. 路由的key，本次是队列名称
-         *  3. 其他参数
+         *  3. 其他参数  例如将消息持久化到硬盘 MessageProperties.PERSISTENT_TEXT_PLAIN
          *  4. 消息体
          */
-        channel.basicPublish("",QUEUE_NAME,null,massage.getBytes());
+        channel.basicPublish("",QUEUE_NAME,null ,massage.getBytes());
         System.out.println("发送完毕");
 
     }

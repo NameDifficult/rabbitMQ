@@ -22,6 +22,11 @@ public class Work2 {
         CancelCallback cancelCallback = consumerTag->{
             System.out.println("接收消息失败");
         };
+        /*
+         *  1 ： 设置为不公平分发，不会进行轮询分发，而是发给空闲的接收线程
+         *  大于1 ： 预取值    表示预先取多少条信息
+         */
+        channel.basicQos(1);
         channel.basicConsume(QUEUE_NAME,false,deliverCallback,cancelCallback);
     }
 }
