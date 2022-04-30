@@ -1,12 +1,11 @@
 package hello;
 
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.MessageProperties;
+import com.rabbitmq.client.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -39,7 +38,9 @@ public class Producer {
          *      4. 是否自动删除
          *      5. 其他参数
          */
-        channel.queueDeclare(QUEUE_NAME,false,false,false,null);
+        Map<String,Object> arguments = new HashMap<>();
+        arguments.put("x-max-priority",10);//设置优先级范围为0-10
+        channel.queueDeclare(QUEUE_NAME,false,false,false,arguments);
         //发消息
         String massage = "你好";
         /*
@@ -49,7 +50,9 @@ public class Producer {
          *  3. 其他参数  例如将消息持久化到硬盘 MessageProperties.PERSISTENT_TEXT_PLAIN
          *  4. 消息体
          */
-        channel.basicPublish("",QUEUE_NAME,null ,massage.getBytes());
+        //设置优先级为5 优先级高的优先被消费
+        AMQP.BasicProperties properties = new AMQP.BasicProperties().builder().priority(5).build();
+        channel.basicPublish("",QUEUE_NAME,properties ,massage.getBytes());
         System.out.println("发送完毕");
 
     }
